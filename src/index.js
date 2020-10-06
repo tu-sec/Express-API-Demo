@@ -1,18 +1,26 @@
+const dotenv = require('dotenv');
 const express = require('express');
-const bodyParser = require('body-parser');  // Required to read request body
+const bodyParser = require('body-parser');
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+// Set up dotenv so we can use the .env file
+dotenv.config();
 
-// Find the routers
+// Body parser packaged required to get the body of requests
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+// The routers of the app
 const heroesRouter = require('./routers/heroRouter');
 const statusRouter = require('./routers/statusRouter');
 app.use('/heroes', heroesRouter);
 app.use('/status', statusRouter);
 
+// Initial base route
 app.get('/', (req, res) => {
     res.send('Welcome to the Express Demo API!');
 });
 
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 3000, () => {
+    console.log(`API is listening on port ${process.env.PORT || 3000}`);
+});
